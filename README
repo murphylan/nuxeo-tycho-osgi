@@ -1,0 +1,8 @@
+Friendly fork of a subset of the nuxeo sources.
+Each nuxeo module will be developped as an eclipse PDE project.
+It will be built with maven-tycho
+We are trying to see how things look like using those technologies and will demo this setup to the nuxeo community if they are interested.
+
+The initial milestone consists of supporting nuxeo's webapp extension with jetty.
+We will commit a jetty-7 adapter as nuxeo's current jetty adapter is using jetty-6.
+The jetty-7 adapter will take advantage of jetty-osgi.
