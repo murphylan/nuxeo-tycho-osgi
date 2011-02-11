@@ -15,11 +15,8 @@
     <module>nuxeo-core/nuxeo-core-event</module>
     <module>nuxeo-core/nuxeo-core-query</module>
     <module>nuxeo-core/nuxeo-core</module>
-    <!--module>assembly/cloud.cas.f</module>
-    <module>assembly/cloud.cas.f.source</module>
-    <module>assembly/cloud.sharedapi.f</module>
-    <module>assembly/cloud.sharedapi.f.source</module>
-    <module>assembly/cloud.cas.repository</module-->
+    <module>nuxeo-core/feature</module>
+    <module>nuxeo-core/feature-source</module>
 
   </modules>
 
