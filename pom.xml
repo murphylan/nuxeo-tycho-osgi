@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.nuxeo</groupId>
+  <artifactId>nuxeo-tycho-osgi</artifactId>
+  <version>5.4.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+
+    <module>nuxeo-common</module>
+    <module>nuxeo-runtime/nuxeo-runtime</module>
+    <module>nuxeo-runtime/nuxeo-runtime-management</module>
+    <module>nuxeo-core/nuxeo-core-schema</module>
+    <module>nuxeo-core/nuxeo-core-api</module>
+    <module>nuxeo-core/nuxeo-core-event</module>
+    <module>nuxeo-core/nuxeo-core-query</module>
+    <module>nuxeo-core/nuxeo-core</module>
+    <!--module>assembly/cloud.cas.f</module>
+    <module>assembly/cloud.cas.f.source</module>
+    <module>assembly/cloud.sharedapi.f</module>
+    <module>assembly/cloud.sharedapi.f.source</module>
+    <module>assembly/cloud.cas.repository</module-->
+
+  </modules>
+
+  <properties>
+    
+    <!-- NOTE: although the sources here are open-source most of the p2repositories
+    are at the moment private to Intalio so at the moment it will be difficult to build
+    this project unless you are inside Intalio's network.
+    We are working on making those repos public or building a pubblic repo just for this project
+    -->
+    
+    <eclipse-mirror-url>http://www.intalio.org/public/p2repo/org/eclipse</eclipse-mirror-url>
+    <!--eclipse-mirror-url>http://download.eclipse.org</eclipse-mirror-url-->
+  
+    <!--forceContextQualifier>042</forceContextQualifier-->
+    <jetty-version>7.1.4.v20100609</jetty-version>
+    <tycho-version>0.9.1</tycho-version>
+    <i-orbit-version>current</i-orbit-version>
+    <i-orbit2-version>current</i-orbit2-version>
+    <i-orbit-binaries-version>current</i-orbit-binaries-version>
+
+    <nuxeo-tycho-libs-version>5.4.0.201102112132</nuxeo-tycho-libs-version>
+
+    <jetty-osgi-version>7.1.4.v20100610</jetty-osgi-version>
+    <jetty-site>${eclipse-mirror-url}/jetty/7.1.4.v20100610/repository/</jetty-site>
+    <!-- http://download.eclipse.org/eclipse/updates/3.6milestones -->
+    <i-orbit-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit/cloud.orbit.repository/${i-orbit-version}</i-orbit-site>
+    <i-orbit2-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit2/cloud.orbit2.repository/${i-orbit2-version}</i-orbit2-site>
+    <i-orbit-binaries>http://release.intalio.com/p2repo/com/intalio/cloud/orbit-binaries/${i-orbit-binaries-version}</i-orbit-binaries>
+    <nuxeo-tycho-libs-repo>http://www.intalio.org/public/p2repo/org/nuxeo/libs/5.4.0.201102112132/</nuxeo-tycho-libs-repo>
+  </properties>
+
+  <dependencies>
+  </dependencies>
+
+  <repositories>
+   <!--repository>
+     <id>ibiblio</id>
+     <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+   </repository-->
+   <repository>
+     <id>intalio-release</id>
+     <url>http://release.intalio.com/m2repo/</url>
+   </repository>
+   <repository>
+     <id>jetty-site</id>
+     <layout>p2</layout>
+     <url>${jetty-site}</url>
+   </repository>
+   <repository>
+     <id>i-orbit-site</id>
+     <layout>p2</layout>
+     <url>${i-orbit-site}</url>
+   </repository>
+   <repository>
+     <id>i-orbit2-site</id>
+     <layout>p2</layout>
+     <url>${i-orbit2-site}</url>
+   </repository>
+   <repository>
+     <id>i-orbit-binaries</id>
+     <layout>p2</layout>
+     <url>${i-orbit-binaries}</url>
+   </repository>
+   <repository>
+     <id>nuxeo-tycho-libs-repo</id>
+     <layout>p2</layout>
+     <url>${nuxeo-tycho-libs-repo}</url>
+   </repository>
+  </repositories>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>tycho-snapshots</id>
+      <!--url>http://repository.sonatype.org/content/repositories/snapshots/</url-->
+      <url>http://intalio.org/public/maven2</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+    <pluginRepository>
+      <id>ibib</id>
+      <!--url>http://repository.sonatype.org/content/repositories/snapshots/</url-->
+      <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
+  
+  <distributionManagement>
+	  <repository>
+		  <id>release.intalio.com</id>
+		  <url>scpexe://release.intalio.com/home/release/m2repo/</url>
+	  </repository>
+	  <snapshotRepository>
+		  <id>snapshot.release.intalio.com</id>
+		  <url>scpexe://release.intalio.com/home/release/m2repo/</url>
+	  </snapshotRepository>
+  </distributionManagement>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.tycho</groupId>
+        <artifactId>maven-osgi-packaging-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <includeSources>true</includeSources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <resolver>p2</resolver>
+          <pomDependencies>consider</pomDependencies>
+          <environments>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86</arch>
+            </environment>
+<!--            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>carbon</ws>
+              <arch>x86</arch>
+            </environment>
+	    <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment> -->
+          </environments>
+        </configuration>
+      </plugin>
+      <!-- Build helper maven plugin sets the parsedVersion.osgiVersion property -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>set-osgi-version</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+	<inherited>true</inherited>
+	<groupId>org.sonatype.tycho</groupId>
+	<artifactId>maven-osgi-source-plugin</artifactId>
+	<version>${tycho-version}</version>
+	<executions>
+	  <execution>
+	  <id>attach-sources</id>
+	  <phase>process-classes</phase>
+	  <goals>
+	    <goal>plugin-source</goal>
+	  </goals>
+	  </execution>
+	</executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <tagBase>scm:git:git@github.com:intalio/cloud-cas.git</tagBase>
+        </configuration>
+      </plugin>
+
+    </plugins>
+    <pluginManagement>
+      <plugins>
+	<plugin>
+	    <groupId>org.sonatype.tycho</groupId>
+	    <artifactId>tycho-p2-publisher-director</artifactId>
+	    <version>${tycho-version}</version>
+	    <configuration>
+	      <compress>true</compress>
+	      <standaloneRepository>false</standaloneRepository>
+	    </configuration>
+	</plugin>
+        <plugin>
+          <groupId>org.sonatype.tycho</groupId>
+          <artifactId>maven-osgi-compiler-plugin</artifactId>
+          <version>${tycho-version}</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.4.3</version>
+          <configuration>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <extensions>
+	    <extension>
+		    <groupId>org.apache.maven.wagon</groupId>
+		    <artifactId>wagon-ftp</artifactId>
+		    <version>1.0-alpha-6</version>
+	    </extension>
+	    <extension>
+		    <groupId>org.apache.maven.wagon</groupId>
+		    <artifactId>wagon-ssh-external</artifactId>
+		    <version>1.0-alpha-6</version>
+	    </extension>
+    </extensions>
+  </build>  
+  
+   <scm>
+	<connection>scm:git:git@github.com:intalio/cloud-cas.git</connection>
+	<url>scm:git:git@github.com:intalio/cloud-cas.git</url>
+	<developerConnection>scm:git:git@github.com:intalio/cloud-cas.git</developerConnection>	
+  </scm>
+
+</project>

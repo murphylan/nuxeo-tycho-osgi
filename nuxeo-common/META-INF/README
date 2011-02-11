@@ -1,0 +1,10 @@
+Original MANIFEST was importing: javax.resource;version="2.0.0" 
+But I can't find that version of the jca package on the web.
+here is the jsr: http://jcp.org/en/jsr/detail?id=322
+latest is version 1.6
+Changed it to 1.5
+
+Also:
+ javax.transaction.xa;version="1.1.1"
+changed to
+ javax.transaction.xa;version="1.1.0"
