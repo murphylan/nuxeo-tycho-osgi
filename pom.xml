@@ -9,7 +9,12 @@
 
     <module>nuxeo-common</module>
     <module>nuxeo-runtime/nuxeo-runtime</module>
+    <module>nuxeo-runtime/nuxeo-runtime-datasource</module>
+    <module>nuxeo-runtime/nuxeo-runtime-deploy</module>
     <module>nuxeo-runtime/nuxeo-runtime-management</module>
+    <module>nuxeo-runtime/feature</module>
+    <module>nuxeo-runtime/feature-source</module>
+    
     <module>nuxeo-core/nuxeo-core-schema</module>
     <module>nuxeo-core/nuxeo-core-api</module>
     <module>nuxeo-core/nuxeo-core-event</module>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="org.nuxeo.runtime.source.f" label="%featureName" version="5.4.0.qualifier" provider-name="%providerName">
+    <description url="%descriptionURL">
+      %description
+   </description>
+    <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+    <license url="%licenseURL">
+      %license
+   </license>
+
+    <plugin id="org.nuxeo.common.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+
+    <plugin id="org.nuxeo.runtime.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+    <plugin id="org.nuxeo.runtime.datasource.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+    <plugin id="org.nuxeo.runtime.deploy.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+    <plugin id="org.nuxeo.runtime.management.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+</feature>
