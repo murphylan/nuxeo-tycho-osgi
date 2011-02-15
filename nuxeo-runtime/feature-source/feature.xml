@@ -16,4 +16,5 @@
     <plugin id="org.nuxeo.runtime.datasource.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
     <plugin id="org.nuxeo.runtime.deploy.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
     <plugin id="org.nuxeo.runtime.management.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+    <plugin id="org.nuxeo.runtime.jetty7.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
 </feature>

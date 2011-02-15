@@ -20,6 +20,7 @@
     <module>nuxeo-core/nuxeo-core-event</module>
     <module>nuxeo-core/nuxeo-core-query</module>
     <module>nuxeo-core/nuxeo-core</module>
+    <module>nuxeo-runtime/nuxeo-runtime-jetty7-adpater</module>
     <module>nuxeo-core/feature</module>
     <module>nuxeo-core/feature-source</module>
 

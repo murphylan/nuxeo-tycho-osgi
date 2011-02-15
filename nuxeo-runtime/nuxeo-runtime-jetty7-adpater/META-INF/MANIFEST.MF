@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nuxeo Jetty Adapter
-Bundle-SymbolicName: org.nuxeo.runtime.jetty;singleton:=true
+Bundle-SymbolicName: org.nuxeo.runtime.jetty7;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-ClassPath: classes
 Bundle-Vendor: Nuxeo
