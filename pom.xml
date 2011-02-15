@@ -23,6 +23,7 @@
     <module>nuxeo-core/feature</module>
     <module>nuxeo-core/feature-source</module>
 
+    <module>nuxeo-p2-assembly/repo</module>
   </modules>
 
   <properties>
@@ -47,6 +48,8 @@
 
     <jetty-osgi-version>7.1.4.v20100610</jetty-osgi-version>
     <jetty-site>${eclipse-mirror-url}/jetty/7.1.4.v20100610/repository/</jetty-site>
+    <!-- ned equinox for the equinox executable feature for the product itself. -->
+    <equinox-site>${eclipse-mirror-url}/eclipse/updates/3.6</equinox-site>
     <!-- http://download.eclipse.org/eclipse/updates/3.6milestones -->
     <i-orbit-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit/cloud.orbit.repository/${i-orbit-version}</i-orbit-site>
     <i-orbit2-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit2/cloud.orbit2.repository/${i-orbit2-version}</i-orbit2-site>
@@ -58,13 +61,10 @@
   </dependencies>
 
   <repositories>
-   <!--repository>
-     <id>ibiblio</id>
-     <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-   </repository-->
    <repository>
-     <id>intalio-release</id>
-     <url>http://release.intalio.com/m2repo/</url>
+     <id>equinox-site</id>
+     <layout>p2</layout>
+     <url>${equinox-site}</url>
    </repository>
    <repository>
      <id>jetty-site</id>
@@ -148,31 +148,31 @@
           <pomDependencies>consider</pomDependencies>
           <environments>
             <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
               <os>win32</os>
               <ws>win32</ws>
               <arch>x86</arch>
             </environment>
 <!--            <environment>
-              <os>linux</os>
-              <ws>gtk</ws>
-              <arch>x86</arch>
-            </environment>
-            <environment>
-              <os>linux</os>
-              <ws>gtk</ws>
-              <arch>x86_64</arch>
-            </environment>
-            <environment>
-              <os>win32</os>
-              <ws>win32</ws>
-              <arch>x86_64</arch>
-            </environment>
-            <environment>
               <os>macosx</os>
               <ws>carbon</ws>
               <arch>x86</arch>
             </environment>
-	    <environment>
+            <environment>
               <os>macosx</os>
               <ws>cocoa</ws>
               <arch>x86</arch>
@@ -181,7 +181,7 @@
               <os>macosx</os>
               <ws>cocoa</ws>
               <arch>x86_64</arch>
-            </environment> -->
+            </environment>-->
           </environments>
         </configuration>
       </plugin>
@@ -222,7 +222,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.0</version>
         <configuration>
-          <tagBase>scm:git:git@github.com:intalio/cloud-cas.git</tagBase>
+          <tagBase>scm:git:git@github.com:intalio/nuxeo-tycho-osgi.git</tagBase>
         </configuration>
       </plugin>
 
@@ -236,6 +236,10 @@
 	    <configuration>
 	      <compress>true</compress>
 	      <standaloneRepository>false</standaloneRepository>
+          <environmentsToArchive><!--os=win32;ws=win32;arch=x86*-->
+                        os=linux;ws=gtk;arch=x86*
+          </environmentsToArchive>
+          <productsToArchive>*</productsToArchive>
 	    </configuration>
 	</plugin>
         <plugin>
@@ -281,9 +285,9 @@
   </build>  
   
    <scm>
-	<connection>scm:git:git@github.com:intalio/cloud-cas.git</connection>
-	<url>scm:git:git@github.com:intalio/cloud-cas.git</url>
-	<developerConnection>scm:git:git@github.com:intalio/cloud-cas.git</developerConnection>	
+	<connection>scm:git:git@github.com:intalio/nuxeo-tycho-osgi.git</connection>
+	<url>scm:git:git@github.com:intalio/nuxeo-tycho-osgi.git</url>
+	<developerConnection>scm:git:git@github.com:intalio/nuxeo-tycho-osgi.git</developerConnection>	
   </scm>
 
 </project>

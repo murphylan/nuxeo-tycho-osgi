@@ -1,7 +1,6 @@
 Export-Package: org.nuxeo.runtime,
  org.nuxeo.runtime.api,
  org.nuxeo.runtime.api.login,
- org.nuxeo.runtime.binding,
  org.nuxeo.runtime.config,
  org.nuxeo.runtime.config.v1,
  org.nuxeo.runtime.deploy,
@@ -24,7 +23,6 @@ Export-Package: org.nuxeo.runtime,
  org.nuxeo.runtime.services.streaming,
  org.nuxeo.runtime.transaction,
  org.nuxeo.runtime.util
-Private-Package: .
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Manifest-Version: 1.0

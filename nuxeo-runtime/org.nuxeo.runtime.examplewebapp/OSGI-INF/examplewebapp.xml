@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<component name="org.intalio.nuxeo.examplewebapp.deployment">
+<!-- [Hugues] for an example of such file in nuxeo, please look into the
+nuxeo-webengine-core-5.2.m3 bundle inside it: OSGI-INF/web-deployment-contrib.xml
+also read the class org.nuxeo.common.server.WebApplication inside the org.nuxeo.common bundle
+to get some idea about what each piece of this xml is defining
+and JettyComponent to understand how they are used. -->
+  <extension target="org.nuxeo.runtime.server" point="webapp">
+  <!-- path is the contextPath must always start with a '/' -->
+    <webapp name="nuxeo" path="/example">
+      <!-- root: location of the root folder for
+      		the resources served by the webapp.
+      		[Hugues] I have patched the JettyComponent source code to be able to
+      		locate a folder inside a bundle that is unzipped:
+      		when the bundle is unzipped and the value of the root element starts with './'
+      		then it looks inside the bundle itself. -->
+      <root>./webapp</root>
+      <!-- webXML: location of the web.xml file -->
+      <webXml>web.xml</webXml>
+    </webapp>
+  </extension>
+</component>

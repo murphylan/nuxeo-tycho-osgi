@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+	<appender name="CONSOLE"
+			class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!--pattern>%-4relative [%thread] %-5level %class - %msg%n</pattern-->
+			<pattern>%d %-5p [%logger{25}] [%X{user} %t] %m%n</pattern>
+		</encoder>
+	</appender>
+
+        <!--Daily rolling file appender -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${jetty.home}/logs/cloud.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>logs/%d{yyyy_MM_dd}.cloud.%i.log</FileNamePattern>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+			  <MaxFileSize>10MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<encoder>
+            <!--pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern-->
+            <pattern>%d %-5p [%logger{25}] [%X{user} %t] %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<root>
+<!-- Set root logger level to ERROR and its only appender to FILE (ie to the files only). -->
+		<level value="ERROR" />
+		<!--appender-ref ref="CONSOLE" /-->
+		<appender-ref ref="FILE" />
+	</root>
+	
+<!-- make sure the applications based on the platform can log warnings -->
+<logger name="com.intalio.cloud" level="WARN"/>
+<!-- #SPECIAL logger for starting/stopping webapps.
+#outputs on the file and on the console too. -->
+<logger name="com.intalio.cloud.lifecycle" level="WARN">
+    <appender-ref ref="CONSOLE"/>
+</logger>
+
+<logger name="xsp" level="WARN"/>
+<logger name="org.apache.commons.jci" level="WARN"/>
+<logger name="xsharp" level="WARN"/>
+
+<!-- this one logs all exceptions happening inside xsharp whether they are re-thrown or not. -->
+<logger name="xsharp.lang.ExceptionUtil" level="WARN"/>
+
+<!-- #none additive logger for the compilation warnings. -->
+<logger name="xsharp.lang.impl.XSharpClassLoaderBase" level="WARN"/>
+
+<!-- #Output of all the queries made against the database -->
+<logger name="xsharp.db" level="WARN"/>
+<!-- #the xsharp's system out and system err loggers: -->
+<logger name="system.err" level="WARN"/>
+<logger name="system.out" level="WARN"/>
+
+<!-- #Some particularly useful (sometimes verbose) loggers: -->
+<!-- #this one reports the time to execute the Execute[xsharp] servlet. -->
+<logger name="xsharp.servlet.perf" level="ERROR"/>
+<!-- #The actual javascript generated when using ext-js. (INFO so see them) -->
+<logger name="xsp.services.js-endpoint" level="ERROR"/>
+<!-- # request (DEBUG to see them.) -->
+<logger name="xsp.services.endpoint.INPUT" level="ERROR"/>
+<!-- # response (DEBUG to see them.) -->
+<logger name="xsp.services.endpoint.OUTPUT" level="ERROR"/>
+
+<!-- ##############################################################################
+#                   Business-Edition Specific Settings                       #
+############################################################################## -->
+
+<logger name="pe" level="ERROR"/>
+<logger name="com.intalio.be" level="ERROR"/>
+
+<!-- # Uncomment following to debug authentication problems -->
+<logger name="jcifs.smb" level="OFF"/>
+<logger name="org.springframework.security" level="OFF"/>
+<logger name="org.jasig" level="OFF"/>
+<logger name="com.intalio.be.server.security" level="OFF"/>
+
+<!-- # Uncomment following to debug multitenancy issues -->
+<logger name="com.intalio.be.multitenancy" level="OFF"/>
+
+<!-- # Uncomment following to debug web service issues -->
+<logger name="pe.server.ws" level="OFF"/>
+<logger name="pe.server.wsdl" level="OFF"/>
+
+<!-- # Uncomment following to debug scheduler issues issues -->
+<logger name="pe.server.scheduler" level="OFF"/>
+<logger name="pe.server.job" level="OFF"/>
+
+<!-- # Uncomment following to debug decision step rules -->
+<logger name="pe.server.rules" level="OFF"/>
+
+<!-- # Uncomment following to debug task notifications -->
+<logger name="pe.integration.notification" level="OFF"/>
+<logger name="pe.integration.email" level="OFF"/>
+
+<!-- # Uncomment following to debug process export-import -->
+<logger name="pe.export" level="OFF"/>
+
+<!-- # Uncomment following to debug workflow and escalation events -->
+<logger name="pe.server.event" level="OFF"/>
+
+<logger name="pe.integration.forms" level="OFF"/>
+
+<logger name="org.hibernate.SQL" level="OFF"/>
+<!-- Disable this logger to avoid output DB connection information. -->
+<logger name="org.hibernate.util.JDBCExceptionReporter" level="OFF" />
+
+<!-- #================================
+# Orbeon
+#================================ -->
+<logger name="org.orbeon.oxf" level="WARN"/>
+<!-- # Uncomment to debug Orbeon forms -->
+<logger name="org.orbeon.oxf.processor.DebugProcessor" level="OFF"/>
+<logger name="org.orbeon.oxf.xforms.processor.XFormsServer" level="OFF"/>
+<logger name="org.orbeon.oxf.xforms.processor.XFormsModelSubmission" level="OFF"/>
+<!-- # Noisy logger (the xml 'database' of orbeon)
+<logger name="org.exist=OFF -->
+
+<!-- #=============================================
+# Jetty and other jasper related categories
+#============================================= -->
+
+<!-- # Don't need so much info on every web page that's rendered -->
+<logger name="org.mortbay" level="WARN"/>
+<logger name="org.eclipse.jetty" level="WARN"/>
+<logger name="org.apache.pluto" level="WARN"/>
+<logger name="org.apache.jasper" level="WARN"/>
+
+<!-- # Various Jetty startup/shutdown output
+<logger name="org.mortbay.http.HttpServer" level="WARN"/>
+<logger name="org.mortbay.http.SocketListener" level="WARN"/>
+<logger name="org.mortbay.http.ajp.AJP13Listener" level="WARN"/>
+<logger name="org.mortbay.util.Container" level="WARN"/>
+<logger name="org.mortbay.util.Credential" level="WARN"/>
+<logger name="org.mortbay.util.ThreadedServer" level="WARN"/>
+<logger name="org.mortbay.jetty.servlet.WebApplicationContext" level="WARN"/>
+<logger name="org.mortbay.jetty.context" level="WARN"/> -->
+
+<!-- # Emits a spurious WARN during startup on /some-path/* security mappings -->
+<logger name="org.apache.catalina.deploy.SecurityCollection" level="ERROR"/>
+
+<logger name="org.apache" level="WARN"/>
+<logger name="org.apache.directory" level="OFF"/>
+<logger name="org.apache.directory.server.ldap.support" level="OFF"/>
+<logger name="org.apache.directory.server.core.entry.DefaultServerAttribute" level="OFF"/>
+
+<logger name="org.apache.axis2" level="WARN"/>
+<logger name="org.apache.struts" level="FATAL"/>
+<logger name="org.apache.servicemix" level="WARN"/>
+<logger name="org.apache.xbean" level="WARN"/>
+<logger name="org.apache.myfaces" level="WARN"/>
+
+<!-- #===============================
+# Apache Ode process engine (simpel)
+#=============================== -->
+<logger name="org.apache.ode" level="WARN"/>
+<logger name="org.apache.ode.bpel" level="WARN"/>
+<logger name="org.apache.ode.bpel.engine" level="WARN"/>
+<logger name="org.apache.ode.bpel.engine.DebuggerSupport" level="WARN"/>
+<logger name="org.apache.ode.bpel.epr" level="WARN"/>
+<logger name="org.apache.ode.jacob" level="WARN"/>
+<logger name="org.apache.ode.sax" level="WARN"/>
+<logger name="org.apache.ode.store" level="WARN"/>
+<logger name="org.apache.ode.sql" level="WARN"/>
+<logger name="org.apache.ode.scheduler" level="WARN"/>
+<logger name="org.apache.ode.utils" level="WARN"/>
+<logger name="org.apache.ode.utils.NSContext" level="WARN"/>
+<logger name="org.intalio.deploy" level="WARN"/>
+<logger name="org.apache.ode.axis2.deploy" level="WARN"/>
+
+<!-- # To track XSL and XPath function evaluation, set these to DEBUG -->
+<logger name="org.apache.ode.bpel.elang.xpath10.runtime" level="WARN"/>
+<logger name="org.apache.ode.bpel.elang.xpath20.runtime" level="WARN"/>
+
+<!-- # Uncomment to enable wire-level HTTP logging -->
+<logger name="httpclient" level="OFF"/>
+
+<!-- #==============================
+# CAS (single-sign on)
+#============================== -->
+<logger name="org.jasig.cas" level="WARN"/>
+<logger name="org.jasig.cas.web.flow" level="WARN"/>
+
+<!-- #==============================
+# java server face(all loggers can be found in com.sun.faces.util.FacesLogger)
+#============================== -->
+<logger name="javax.enterprise.resource.webcontainer.jsf.application" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.config" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.context" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.lifecycle" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.managedbean" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.renderkit" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.taglib" level="ERROR"/>
+<logger name="javax.enterprise.resource.webcontainer.jsf.timing" level="ERROR"/>
+
+</configuration>
+

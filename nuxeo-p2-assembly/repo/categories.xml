@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site name="nuxeo repository">
+   <feature url="features/org.nuxeo.runtime.f_5.4.0.qualifier.jar" id="org.nuxeo.runtime.f" version="5.4.0.qualifier">
+   </feature>
+   <feature url="features/org.nuxeo.runtime.source.f_5.4.0.qualifier.jar" id="org.nuxeo.runtime.source.f" version="5.4.0.qualifier">
+   </feature>
+   <feature url="features/org.nuxeo.ecm.core.f_5.4.0.qualifier.jar" id="org.nuxeo.ecm.core.f" version="5.4.0.qualifier">
+   </feature>
+   <feature url="features/org.nuxeo.ecm.core.source.f_5.4.0.qualifier.jar" id="org.nuxeo.ecm.core.source.f" version="5.4.0.qualifier">
+   </feature>
+</site>

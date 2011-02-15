@@ -20,59 +20,64 @@
 package org.nuxeo.runtime.jetty;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.NCSARequestLog;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.handler.RequestLogHandler;
-import org.mortbay.jetty.webapp.WebAppClassLoader;
-import org.mortbay.jetty.webapp.WebAppContext;
-import org.mortbay.xml.XmlConfiguration;
+import org.eclipse.jetty.osgi.boot.JettyBootstrapActivator;
+import org.eclipse.jetty.osgi.boot.OSGiWebappConstants;
+import org.eclipse.jetty.osgi.boot.utils.BundleFileLocatorHelper;
 import org.nuxeo.common.Environment;
 import org.nuxeo.common.server.WebApplication;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.deployment.preprocessor.DeploymentPreprocessor;
 import org.nuxeo.runtime.model.ComponentContext;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.ComponentName;
 import org.nuxeo.runtime.model.DefaultComponent;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 /**
- * @author <a href="mailto:bs@nuxeo.com">Bogdan Stefanescu</a>
+ * @author hmalphettes
  *
  */
 public class JettyComponent extends DefaultComponent {
 
-    public static final ComponentName NAME = new ComponentName("org.nuxeo.runtime.server");
-    public static final String XP_WEB_APP = "webapp";
-    public static final String XP_DATA_SOURCE = "datasource";
-
-    protected Server server;
-    protected ContextHandlerCollection contexts = new ContextHandlerCollection();
-    protected File config;
-    protected File log;
+    public static final ComponentName NAME = new ComponentName(
+	    "org.nuxeo.runtime.server");
+	
+	public static final String XP_WEB_APP = "webapp";
+	
+	public static final String XP_SERVLET = "servlet";
+	public static final String XP_FILTER = "filter";
+	
+	public static final String P_SCAN_WEBDIR = "org.nuxeo.runtime.jetty.scanWebDir";
+	
+//  protected Server server;
+//  protected ContextHandlerCollection contexts = new ContextHandlerCollection();
+	protected ContextManager ctxMgr;
 
     private static final Log logger = LogFactory.getLog(JettyComponent.class);
 
-    public Server getServer() {
-        return server;
-    }
+//    public Server getServer() {
+    	//for now return null;
+    	//we could access the default jetty server which is registered as an OSGi service.
+        //return server;
+//    }
 
     /**
+     * The jetty server is started by making sure that the jetty.osgi.boot bundle is also started.
      * 
      * @param context
      * @throws Exception
      */
     @Override
     public void activate(ComponentContext context) throws Exception {
-        // apply bundled configuration
+    	Bundle jettyBoot = FrameworkUtil.getBundle(JettyBootstrapActivator.class);
+    	jettyBoot.start();//won't make a difference if it is already started
+/*        // apply bundled configuration
         URL cfg = null;
 
         String cfgName = Framework.getProperty("org.nuxeo.jetty.config");
@@ -155,12 +160,16 @@ public class JettyComponent extends DefaultComponent {
             server.setHandlers(newHandlers);
         }
         server.start();
+        */
     }
 
+    /**
+     * Nothing to do. Unless we decide that we must be in charge of stopping the jetty server.
+     */
     @Override
     public void deactivate(ComponentContext context) throws Exception {
-        server.stop();
-        server = null;
+//        server.stop();
+//        server = null;
     }
 
     @Override
@@ -168,13 +177,6 @@ public class JettyComponent extends DefaultComponent {
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
     	if (XP_WEB_APP.equals(extensionPoint)) {
-        //[Hugues] if no jndi is setup let's do it:
-    		if (System.getProperty("java.naming.factory.initial") == null) {
-    			System.setProperty("java.naming.factory.initial", "org.mortbay.naming.InitialContextFactory");
-    		}
-    		if (System.getProperty("java.naming.factory.url.pkgs") == null) {
-    			System.setProperty("java.naming.factory.url.pkgs", "org.mortbay.naming");
-    		}
     		
     		File home = Environment.getDefault().getHome();
             WebApplication app = (WebApplication)contribution;
@@ -186,70 +188,63 @@ public class JettyComponent extends DefaultComponent {
                 dp.predeploy();
                 logger.info("Deployment preprocessing terminated");
             }
-
-            WebAppContext ctx = new WebAppContext();
-            ctx.setContextPath(app.getContextPath());
+            
+            Dictionary<String, String> props = new Hashtable<String, String>();
             String root = app.getWebRoot();
+            String webappFolderPath = null;
             if (root != null) {
                 File file = null;
-                //[Hugues] look for pathes that start with ./
+                //[Hugues] look for paths that start with ./
                 //and in that case consider that it is inside the bundle itself.
-                if (root.startsWith("./")) {
-                	File bundle = getBundleInstallLocation(
-                			contributor.getContext().getBundle());
-                	file = new File(bundle, root.substring(2));
-                } else {
+                if (!root.startsWith("./")) {
                 	file = new File(home, root);
                 }
-                ctx.setWar(file.getAbsolutePath());
+                if (file == null || !file.exists()) {
+                	File bundle = BundleFileLocatorHelper.DEFAULT.getBundleInstallLocation(
+                			contributor.getContext().getBundle());
+                	file = new File(bundle, root.substring(2));
+                }
+                webappFolderPath = file.getAbsolutePath();
+//                ctx.setWar(file.getAbsolutePath());
             }
             String webXml = app.getConfigurationFile();
             if (webXml != null) {
-                File file = new File(home, root);
-                ctx.setDescriptor(file.getAbsolutePath());
+                File file = new File(home, webXml);
+                File file1 = null;
+                if (!file.exists()) {
+                	if (webXml.startsWith("./")) {
+                		webXml = webXml.substring(2);
+                	}
+                	File bundle = BundleFileLocatorHelper.DEFAULT.getBundleInstallLocation(
+                			contributor.getContext().getBundle());
+                	file1 = new File(bundle, webXml);
+                    if (!file1.exists()) {
+                    	throw new IllegalArgumentException("Unable to locate " + file.getAbsolutePath()
+                    			+ " and unable to locate " + file1.getAbsolutePath());
+                    }
+                    props.put(OSGiWebappConstants.SERVICE_PROP_WEB_XML_PATH, file1.getAbsolutePath());
+                } else {
+                	props.put(OSGiWebappConstants.SERVICE_PROP_WEB_XML_PATH, file.getAbsolutePath());
+                }
+                
+//                ctx.setDescriptor(file.getAbsolutePath());
             }
             File defWebXml = new File(Environment.getDefault().getConfig(), "default-web.xml");
             if (defWebXml.isFile()) {
-              ctx.setDefaultsDescriptor(defWebXml.getAbsolutePath());
+//              ctx.setDefaultsDescriptor(defWebXml.getAbsolutePath());
+                props.put(OSGiWebappConstants.SERVICE_PROP_DEFAULT_WEB_XML_PATH, defWebXml.getAbsolutePath());            	
             }
+            contributor.getContext().getBundle().start();
+            JettyBootstrapActivator.registerWebapplication(contributor.getContext().getBundle(),
+            		webappFolderPath, app.getContextPath(), props);
 
-            contexts.addHandler(ctx);
-            org.mortbay.log.Log.setLog(new Log4JLogger(logger));
+//            org.eclipse.jetty.util.log.Log.setLog(new Log4JLogger(logger));
             
-            //[Hugues] if we want the webapp to be able to load classes inside osgi
-            //we must get a hold of the bundle's classloader.
-            //I have not found a way to do this directly from the bundle object unfortunately.
-            //As a workaround, we require the developer to declare the class name of
-            //an object that is defined inside the bundle.
-            //TODO: better (?)
-            String bundleClassName = (String) contributor.getContext().getBundle()
-            	.getHeaders().get("Webapp-InternalClassName");
-            if (bundleClassName == null) {
-            	bundleClassName = (String) contributor.getContext().getBundle()
-            		.getHeaders().get("Bundle-Activator");
-            }
-            if (bundleClassName == null) {
-            	//parse the web.xml and look for a class name there ?
-            }
-            if (bundleClassName != null) {
-	            ClassLoader osgiCl = contributor.getContext().getBundle()
-	            		.loadClass(bundleClassName).getClassLoader();
-	            ClassLoader composite = new TwinClassLoaders(server.getClass().getClassLoader(), osgiCl);
-	            WebAppClassLoader wcl = new WebAppClassLoader(composite, ctx);
-	    		ctx.setClassLoader(wcl);
-            }
-            
-            ctx.start();
-            //HandlerWrapper wrapper = (HandlerWrapper)ctx.getHandler();
-            //wrapper = (HandlerWrapper)wrapper.getHandler();
-            //wrapper.setHandler(new NuxeoServletHandler());
 
-            if (ctx.isFailed()) {
-                logger.error("Error in war deployment");
-            }
-
-        } else if (XP_DATA_SOURCE.equals(extensionPoint)) {
-
+        } else if (XP_FILTER.equals(extensionPoint)) {
+            ctxMgr.addFilter((FilterDescriptor)contribution);
+        } else if (XP_SERVLET.equals(extensionPoint)) {
+            ctxMgr.addServlet((ServletDescriptor)contribution);
         }
     }
 
@@ -258,72 +253,22 @@ public class JettyComponent extends DefaultComponent {
             String extensionPoint, ComponentInstance contributor)
             throws Exception {
         if (XP_WEB_APP.equals(extensionPoint)) {
-
-        } else if (XP_DATA_SOURCE.equals(extensionPoint)) {
-
+        	JettyBootstrapActivator.unregister(((WebApplication)contribution).getContextPath());
+        } else if (XP_FILTER.equals(extensionPoint)) {
+            ctxMgr.removeFilter((FilterDescriptor)contribution);
+        } else if (XP_SERVLET.equals(extensionPoint)) {
+            ctxMgr.removeServlet((ServletDescriptor)contribution);
         }
     }
 
     @Override
     public <T> T getAdapter(Class<T> adapter) {
-        if (adapter == org.mortbay.jetty.Server.class) {
-            return adapter.cast(server);
+        if (adapter == org.eclipse.jetty.server.Server.class) {
+            return null;
+        	//return adapter.cast(server);
         }
         return null;
     }
-
-//hack to locate the file-system directly from the bundle.
-//support equinox, felix and nuxeo's osgi implementations.
-//not tested on nuxeo and felix just yet.
-//The url nuxeo and felix return is created directly from the File so it should work.
-	private static Field BUNDLE_ENTRY_FIELD = null;
-	private static Field FILE_FIELD = null;
-	public static File getBundleInstallLocation(Bundle bundle) throws Exception {
-		//String installedBundles = System.getProperty("osgi.bundles");
-		//grab the MANIFEST.MF's url
-		//and then do what it takes.
-		URL url = bundle.getEntry("/META-INF/MANIFEST.MF");
-//		System.err.println(url.toString() + " " + url.toURI() + " " + url.getProtocol());
-		if (url.getProtocol().equals("file")) {
-			//this is the case with Felix and maybe other OSGI frameworks
-			//should make sure it is not a jar.
-			return new File(url.toURI()).getParentFile().getParentFile();
-		} else if (url.getProtocol().equals("bundleentry")) {
-			//say hello to equinox who has its own protocol.
-			//we use introspection like there is no tomorrow to get access to the File
-			URLConnection con = url.openConnection();
-			if (BUNDLE_ENTRY_FIELD == null) {
-				BUNDLE_ENTRY_FIELD = con.getClass().getDeclaredField("bundleEntry");
-				BUNDLE_ENTRY_FIELD.setAccessible(true);
-			}
-			Object bundleEntry = BUNDLE_ENTRY_FIELD.get(con);
-			if (FILE_FIELD == null) {
-				FILE_FIELD = bundleEntry.getClass().getDeclaredField("file");
-				FILE_FIELD.setAccessible(true);
-			}
-			File f = (File)FILE_FIELD.get(bundleEntry);
-			return f.getParentFile().getParentFile();
-		}
-		return null;
-	}
-}
-class TwinClassLoaders extends ClassLoader {
-	private ClassLoader _cl2;
-	public TwinClassLoaders(ClassLoader cl1, ClassLoader cl2) {
-		super(cl1);
-		_cl2 = cl2;
-	}
-	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		try {
-			return super.findClass(name);
-		} catch (ClassNotFoundException cne) {
-			if (_cl2 != null) {
-				return _cl2.loadClass(name);
-			} else {
-				throw cne;
-			}
-		}
-	}
 
 }
 
