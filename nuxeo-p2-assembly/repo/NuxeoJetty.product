@@ -30,13 +30,14 @@
       <feature id="org.eclipse.equinox.server.p2" version="0.0.0"/>
       <feature id="org.eclipse.jetty.p2.extras" version="0.0.0"/>
       <feature id="org.eclipse.jetty.starterkit" version="0.0.0"/>
-      <feature id="org.eclipse.jetty.starterkit.source" version="0.0.0"/>
       <feature id="org.nuxeo.runtime.f" version="0.0.0"/>
       <feature id="org.nuxeo.ecm.core.f" version="0.0.0"/>
       
-      <!-- add the sources while we are it. -->
+      <!-- if we wanted to add the sources while we are it.
+      <feature id="org.eclipse.jetty.starterkit.source" version="0.0.0"/>
+      <feature id="org.nuxeo.ecm.core.source.f" version="0.0.0"/> -->
+      <!-- to demo the provisioning of the SDK, only bundle one source feature. -->
       <feature id="org.nuxeo.runtime.source.f" version="0.0.0"/>
-      <feature id="org.nuxeo.ecm.core.source.f" version="0.0.0"/>
    </features>
 
    <configurations>
@@ -50,13 +51,6 @@
       <plugin id="org.eclipse.jetty.osgi.boot" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.jetty.osgi.httpservice" autoStart="true" startLevel="4" />
 
-<!-- the setStartLevel and markStarted instructions are now down inside 
-     the features that contain the web-bundle
-     as it is a best practice and keeps things more pluggable.
-     For example look in features/xsharp.platform/p2.inf
-      <plugin id="xsharp.platform" autoStart="true" startLevel="5" />
-      <plugin id="cloud.cas" autoStart="true" startLevel="5" />
--->
       <property name="osgi.startLevel" value="100" />   
       <property name="java.awt.headless" value="true" />   
       <property name="osgi.requiredJavaVersion" value="1.5.0"/>

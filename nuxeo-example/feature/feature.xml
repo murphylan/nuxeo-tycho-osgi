@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="org.nuxeo.runtime.example.f" label="%featureName" version="5.4.0.qualifier" provider-name="%providerName">
+    <description url="%descriptionURL">
+      %description
+   </description>
+    <copyright url="%copyrightURL">
+      %copyright
+   </copyright>
+    <license url="%licenseURL">
+      %license
+   </license>
+    <plugin id="org.nuxeo.runtime.examplewebapp" download-size="0" install-size="0" version="0.0.0" unpack="true"/>
+    <plugin id="org.nuxeo.runtime.examplewebapp.source" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
+</feature>

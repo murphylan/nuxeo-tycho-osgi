@@ -24,6 +24,9 @@
     <module>nuxeo-core/feature</module>
     <module>nuxeo-core/feature-source</module>
 
+    <module>nuxeo-example/org.nuxeo.runtime.examplewebapp</module>
+    <module>nuxeo-example/feature</module>
+
     <module>nuxeo-p2-assembly/repo</module>
   </modules>
 

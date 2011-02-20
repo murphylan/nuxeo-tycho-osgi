@@ -8,4 +8,7 @@
    </feature>
    <feature url="features/org.nuxeo.ecm.core.source.f_5.4.0.qualifier.jar" id="org.nuxeo.ecm.core.source.f" version="5.4.0.qualifier">
    </feature>
+   
+   <feature url="features/org.nuxeo.runtime.example.f.f_5.4.0.qualifier.jar" id="org.nuxeo.runtime.example.f" version="5.4.0.qualifier">
+   </feature>
 </site>

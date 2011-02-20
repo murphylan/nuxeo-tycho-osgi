@@ -1,8 +1,59 @@
 Friendly fork of a subset of the nuxeo sources.
-Each nuxeo module will be developped as an eclipse PDE project.
-It will be built with maven-tycho
+Modules are developped as an eclipse PDE project.
 We are trying to see how things look like using those technologies and will demo this setup to the nuxeo community if they are interested.
 
+Build and dependencies:
+-----------------------
+They are built with maven-tycho
+They depend on 4 repositories:
+Eclipse-equinox-platform mirrored here: http://www.intalio.org/public/p2repo/org/eclipse/eclipse/updates/3.6/
+Jetty-Helios mirrored here: http://www.intalio.org/public/p2repo/org/eclipse/jetty/7.1.4.v20100610/repository/
+A subset of eclipse-orbit published here: http://www.intalio.org/public/p2repo/org/nuxeo/libs-eclipse-orbit/current/
+A set of bundles built from their sources: http://www.intalio.org/public/p2repo/org/nuxeo/libs/current/
+
+Nuxeo-functionality and jetty-osgi integration:
+-----------------------------------------------
 The initial milestone consists of supporting nuxeo's webapp extension with jetty.
-We will commit a jetty-7 adapter as nuxeo's current jetty adapter is using jetty-6.
-The jetty-7 adapter will take advantage of jetty-osgi.
+The jetty-7 adapter supports the webapp nuxeo-extension-point.
+It take advantage of jetty-osgi.
+https://github.com/intalio/nuxeo-tycho-osgi/tree/master/nuxeo-runtime/nuxeo-runtime-jetty7-adpater
+
+Runtime and SDK provisioning with p2-director:
+----------------------------------------------
+A composite repository pointing at all the repositories and the latest build of this project is located here:
+http://www.intalio.org/public/p2repo/org/nuxeo/all/latest/
+
+PDE is able to provision a target platform out of this repository.
+However PDE does not provision products and root artifacts
+(aka files and folders that are not inside OSGi bundles or eclipse features.)
+and PDE is not the lightest way to script an install/update mechanism for production installations.
+
+We recommend using p2director on the command-line.
+In order to keep the command-line short of the 10 or so arguments required for an installation you can use:
+http://www.intalio.org/public/maven2/org/eclipse/rt/EclipseRTp2HeadlessDirector/3.6.0.v20101106-linux.gtk.x86/EclipseRTP2DirectorExtended-3.7.0.v20101106.tar.gz
+It is an extended version of p2director that supports reading arguments defined in a remote properties file.
+It is developped here:
+https://github.com/intalio/org.eclipse.equinox.p2.director.extended/
+
+Once installed make a new installation folder and navigate to it on the shell:
+cd nuxeo-installation-folder
+p2director -props http://www.intalio.org/public/p2repo/org/nuxeo/runtime/nuxeo-webapp-adapter-with-example.properties
+
+if you want to download the source bundles:
+p2director -addSources -props http://www.intalio.org/public/p2repo/org/nuxeo/runtime/nuxeo-webapp-adapter-with-example.properties
+
+
+Upgrading: the dumb way.
+------------------------
+Limitations: the procedure above does not support upgrading.
+In my experience, upgrading with p2 is a great feature but a more complex one.
+Unless your application is entirely dynamic and can be upgraded on the fly, you will usually need to shutdown the application.
+At this point, we archive the installation's "destination" folder (rename it) then we re-execute the installation.
+It will pick-up the latest of build or the additional features.
+It will not re-download the bundles that are stored in the shared bundle-pool and that are already up to date.
+
+If things go wrong, the previous installation folder is still present and you can roll-back very easily this way.
+Note that p2 supports rolling-back internally using profiles.
+So this method is really not taking advantage of p2 on many levels.
+
+
