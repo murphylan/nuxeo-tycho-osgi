@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2006-2008 Nuxeo SAS (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2006-2011 Nuxeo SAS (http://nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -28,6 +28,8 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jetty.osgi.boot.JettyBootstrapActivator;
 import org.eclipse.jetty.osgi.boot.OSGiWebappConstants;
 import org.eclipse.jetty.osgi.boot.utils.BundleFileLocatorHelper;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.nuxeo.common.Environment;
 import org.nuxeo.common.server.WebApplication;
 import org.nuxeo.runtime.deployment.preprocessor.DeploymentPreprocessor;
@@ -38,18 +40,17 @@ import org.nuxeo.runtime.model.DefaultComponent;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * @author hmalphettes
- *
  */
 public class JettyComponent extends DefaultComponent {
 
-    public static final ComponentName NAME = new ComponentName(
-	    "org.nuxeo.runtime.server");
+    public static final ComponentName NAME = new ComponentName("org.nuxeo.runtime.server");
 	
 	public static final String XP_WEB_APP = "webapp";
-	
 	public static final String XP_SERVLET = "servlet";
 	public static final String XP_FILTER = "filter";
 	
@@ -234,6 +235,8 @@ public class JettyComponent extends DefaultComponent {
 //              ctx.setDefaultsDescriptor(defWebXml.getAbsolutePath());
                 props.put(OSGiWebappConstants.SERVICE_PROP_DEFAULT_WEB_XML_PATH, defWebXml.getAbsolutePath());            	
             }
+            //make sure that the contributor is started otherwise jettybootstrap crashes with an ugly NPE.
+            //this issue is probably fixed in a later version of jetty.
             contributor.getContext().getBundle().start();
             JettyBootstrapActivator.registerWebapplication(contributor.getContext().getBundle(),
             		webappFolderPath, app.getContextPath(), props);
@@ -269,6 +272,37 @@ public class JettyComponent extends DefaultComponent {
         }
         return null;
     }
+    
+    private static String SLASH_ESCAPED_FOR_LDAP = "\2f";
+    
+    protected void addFilter(FilterDescriptor contribution, ComponentInstance contributor) {
+    	String contextPath = contribution.getContext();
+    	if (contextPath.startsWith("/")) {
+    		if (contextPath.length() > 1) {
+    			contextPath = contextPath.substring(1);
+    		} else {
+    			contextPath = "";
+    		}
+    	}
+    	//search for the webapp with that context path.
+    	BundleContext bc = FrameworkUtil.getBundle(JettyBootstrapActivator.class).getBundleContext();
+    	String filter = OSGiWebappConstants.SERVICE_PROP_CONTEXT_PATH + "=" +
+    						SLASH_ESCAPED_FOR_LDAP + contextPath;
+    	try {
+			ServiceReference[] refs = bc.getServiceReferences(ContextHandler.class.getName(), filter);
+			for (ServiceReference r : refs) {
+				
+			}
+		} catch (InvalidSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	WebAppContext webAppContext = null;
+//    	webAppContext.addFilter ...
+    }
+    
+    protected void addServlet(ServletDescriptor contribution, ComponentInstance contributor) {
 
+    }
 }
 

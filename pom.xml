@@ -55,7 +55,8 @@
     <i-orbit-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit/cloud.orbit.repository/${i-orbit-version}</i-orbit-site>
     <i-orbit2-site>http://release.intalio.com/p2repo/com/intalio/cloud/orbit2/cloud.orbit2.repository/${i-orbit2-version}</i-orbit2-site>
     <i-orbit-binaries>http://release.intalio.com/p2repo/com/intalio/cloud/orbit-binaries/${i-orbit-binaries-version}</i-orbit-binaries>
-    <nuxeo-tycho-libs-repo>http://www.intalio.org/public/p2repo/org/nuxeo/libs/5.4.0.201102112132/</nuxeo-tycho-libs-repo>
+    <nuxeo-tycho-libs-repo>http://www.intalio.org/public/p2repo/org/nuxeo/libs/current</nuxeo-tycho-libs-repo>
+    <nuxeo-tycho-libs-eclipse-orbit-repo>http://www.intalio.org/public/p2repo/org/nuxeo/libs-eclipse-orbit/current</nuxeo-tycho-libs-eclipse-orbit-repo>
   </properties>
 
   <dependencies>
@@ -72,7 +73,7 @@
      <layout>p2</layout>
      <url>${jetty-site}</url>
    </repository>
-   <repository>
+   <!--repository>
      <id>i-orbit-site</id>
      <layout>p2</layout>
      <url>${i-orbit-site}</url>
@@ -86,11 +87,16 @@
      <id>i-orbit-binaries</id>
      <layout>p2</layout>
      <url>${i-orbit-binaries}</url>
-   </repository>
+   </repository-->
    <repository>
      <id>nuxeo-tycho-libs-repo</id>
      <layout>p2</layout>
      <url>${nuxeo-tycho-libs-repo}</url>
+   </repository>
+   <repository>
+     <id>nuxeo-tycho-libs-eclipse-orbit-repo</id>
+     <layout>p2</layout>
+     <url>${nuxeo-tycho-libs-eclipse-orbit-repo}</url>
    </repository>
   </repositories>
   
