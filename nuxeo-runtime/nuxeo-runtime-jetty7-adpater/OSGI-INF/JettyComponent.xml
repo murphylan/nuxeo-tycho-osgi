@@ -10,7 +10,8 @@
   </documentation>
 
   <service>
-    <provide interface="org.mortbay.jetty.Server"/>
+    <!--provide interface="org.mortbay.jetty.Server"/-->
+    <provide interface="org.eclipse.jetty.server.Server"/>
   </service>
 
   <extension-point name="webapp">

@@ -37,8 +37,7 @@ https://github.com/intalio/org.eclipse.equinox.p2.director.extended/
 
 Once installed make a new installation folder and navigate to it on the shell:
 cd nuxeo-installation-folder
-p2director -props http://www.intalio.org/public/p2repo/org/nuxeo/runtime/nuxeo-webapp-adapter-with-example.properties
-
+http://www.intalio.org/public/maven2/org/eclipse/rt/EclipseRTp2HeadlessDirector/3.7.0.v20110221/EclipseRTP2DirectorExtended-3.7.0.v20110221.tar.gz
 if you want to download the source bundles:
 p2director -addSources -props http://www.intalio.org/public/p2repo/org/nuxeo/runtime/nuxeo-webapp-adapter-with-example.properties
 

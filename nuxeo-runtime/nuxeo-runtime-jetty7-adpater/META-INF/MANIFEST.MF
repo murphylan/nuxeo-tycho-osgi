@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Nuxeo Jetty Adapter
 Bundle-SymbolicName: org.nuxeo.runtime.jetty7;singleton:=true
 Bundle-Version: 5.4.0.qualifier
-Bundle-ClassPath: classes
 Bundle-Vendor: Nuxeo
 Bundle-Localization: bundle
 Export-Package: org.nuxeo.runtime.jetty

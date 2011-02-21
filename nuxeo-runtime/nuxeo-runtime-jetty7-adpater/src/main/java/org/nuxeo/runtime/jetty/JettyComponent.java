@@ -203,7 +203,10 @@ public class JettyComponent extends DefaultComponent {
                 if (file == null || !file.exists()) {
                 	File bundle = BundleFileLocatorHelper.DEFAULT.getBundleInstallLocation(
                 			contributor.getContext().getBundle());
-                	file = new File(bundle, root.substring(2));
+                	if (root.startsWith("./")) {
+                		root = root.substring(2);
+                	}
+                	file = new File(bundle, root);
                 }
                 webappFolderPath = file.getAbsolutePath();
 //                ctx.setWar(file.getAbsolutePath());

@@ -9,4 +9,26 @@
   </parent>
   <artifactId>org.nuxeo.runtime.jetty.product</artifactId>
   <packaging>eclipse-repository</packaging>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <configuration>
+              <tasks>
+                <copydir src="jettyhome" dest="target/jettyhome" />
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
