@@ -20,8 +20,9 @@ Import-Package: javax.annotation;version="1.0",
  org.nuxeo.common,
  org.nuxeo.common.server,
  org.nuxeo.common.xmap.annotation,
+ org.nuxeo.common.jndi,
  org.nuxeo.runtime.api,
- org.nuxeo.runtime.deployment.preprocessor;resolution:=optional,
+ org.nuxeo.runtime.deployment.preprocessor,
  org.nuxeo.runtime.model,
  org.osgi.framework;version="1.4"
 Nuxeo-Component: OSGI-INF/JettyComponent.xml
