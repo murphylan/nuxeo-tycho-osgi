@@ -31,7 +31,9 @@
 		<!--appender-ref ref="FILE" /-->
 	</root>
 
-<!-- make sure the applications based on the platform can log debug statements -->
 <logger name="org.nuxeo" level="INFO"/>
+
+<!-- log webapp errors -->
+<logger name="org.eclipse.jetty.util.log" level="WARN"/>
 
 </configuration>

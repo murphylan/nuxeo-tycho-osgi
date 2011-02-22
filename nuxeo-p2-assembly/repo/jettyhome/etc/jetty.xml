@@ -151,27 +151,27 @@
             </Arg>
           </Call>
           <!-- Providers of OSGi Apps -->
-		 <Call name="addAppProvider">
-		   <Arg>
-		     <New class="org.eclipse.jetty.osgi.boot.OSGiAppProvider">
-		       <Set name="monitoredDir"><Property name="jetty.home" default="." />/webapps</Set>
-		       <Set name="defaultsDescriptor"><Property name="jetty.home" default="."/>/etc/webdefault.xml</Set>
-		       <Set name="scanInterval">5</Set>
-		       <Set name="contextXmlDir"><Property name="jetty.home" default="." />/contexts</Set>
-		       <!-- comma separated list of bundle symbolic names that
-		            contain custom tag libraries (*.tld files)
-		            if those bundles don't exist or can't be loaded no errors or warning will be issued!
-		            this default value is to plug the tld files of the reference implementation of JSF -->
-		       <Set name="tldBundles">
-			    <Property name="org.eclipse.jetty.osgi.tldsbundles"
-			         default="javax.faces.jsf-impl,
+         <Call name="addAppProvider">
+           <Arg>
+             <New class="org.eclipse.jetty.osgi.boot.OSGiAppProvider">
+               <Set name="monitoredDir"><Property name="jetty.home" default="." />/webapps</Set>
+               <Set name="defaultsDescriptor"><Property name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+               <Set name="scanInterval">5</Set>
+               <Set name="contextXmlDir"><Property name="jetty.home" default="." />/contexts</Set>
+               <!-- comma separated list of bundle symbolic names that
+                    contain custom tag libraries (*.tld files)
+                    if those bundles don't exist or can't be loaded no errors or warning will be issued!
+                    this default value is to plug the tld files of the reference implementation of JSF -->
+               <Set name="tldBundles">
+                <Property name="org.eclipse.jetty.osgi.tldsbundles"
+                     default="javax.faces.jsf-impl,
                              org.springframework.web.servlet,
                              com.opensymphony.sitemesh,
                              com.opensymphony.oscache" />
-		       </Set>
-		     </New>
-		   </Arg>
-		 </Call>
+               </Set>
+             </New>
+           </Arg>
+         </Call>
           
         </New>
       </Arg>
@@ -249,8 +249,9 @@
             <Item>org.eclipse.jetty.webapp.WebXmlConfiguration</Item>
             <Item>org.eclipse.jetty.webapp.MetaInfConfiguration</Item>
             <Item>org.eclipse.jetty.webapp.FragmentConfiguration</Item>
-            <Item>org.eclipse.jetty.plus.webapp.EnvConfiguration</Item>
-            <Item>org.eclipse.jetty.plus.webapp.Configuration</Item>
+            <!-- No jetty's jndi: nuxeo jndi will do fine. -->
+            <!--Item>org.eclipse.jetty.plus.webapp.EnvConfiguration</Item>
+            <Item>org.eclipse.jetty.plus.webapp.Configuration</Item-->
             <Item>org.eclipse.jetty.webapp.JettyWebXmlConfiguration</Item>
             <Item>org.eclipse.jetty.webapp.TagLibConfiguration</Item>
         </Array>
@@ -304,7 +305,8 @@
     <Set name="sendDateHeader">true</Set>
     <Set name="gracefulShutdown">1000</Set>
     
-    <!-- jetty-jndi by default -->
+    <!-- jetty-jndi by default: use nuxeo's -->
+<!--
     <Call class="java.lang.System" name="setProperty">
       <Arg>java.naming.factory.initial</Arg>
       <Arg><Property name="java.naming.factory.initial" default="org.eclipse.jetty.jndi.InitialContextFactory"/></Arg>
@@ -313,5 +315,5 @@
       <Arg>java.naming.factory.url.pkgs</Arg>
       <Arg><Property name="java.naming.factory.url.pkgs" default="org.eclipse.jetty.jndi"/></Arg>
     </Call>
-
+-->
 </Configure>

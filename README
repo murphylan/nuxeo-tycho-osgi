@@ -42,6 +42,18 @@ if you want to download the source bundles:
 p2director -addSources -props http://www.intalio.org/public/p2repo/org/nuxeo/runtime/nuxeo-webapp-adapter-with-example.properties
 
 
+Running on the command-line
+----------------------------
+In the installation folder:
+ ./start.sh
+ or start.bat
+
+PDE setup
+---------
+Import the installation folder as a project in eclipse PDE.
+Double-click on the target
+
+
 Upgrading: the dumb way.
 ------------------------
 Limitations: the procedure above does not support upgrading.
